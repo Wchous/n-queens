@@ -206,11 +206,18 @@
         }
       }
       return false; // fixme
-    }
+    },
 
     /*--------------------  End of Helper Functions  ---------------------*/
 
-
+    clearBoard: function () {
+      for (let i = 0; i < this.attributes.n; i++) {
+        if (this.rows()[i].includes(1)) {
+          let emptyRow = _(_.range(this.attributes.n)).map(function() {return 0;})
+          this.set(i, emptyRow);
+        }
+      }
+    }
   });
 
   var makeEmptyMatrix = function(n) {
