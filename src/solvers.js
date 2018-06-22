@@ -52,61 +52,61 @@ window.findNRooksSolution = function(n, startR = 0, startC = 0) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  console.log(`__________ begin countNRooksSolutions for ${n}`);
-  var solutionCount = 0;
+  // console.log(`__________ begin countNRooksSolutions for ${n}`);
+  // var solutionCount = 0;
   
-  // Checks for a valid solution by counting pieces
-  var isValid = function(n,solutionMatrix){  var numberOfPieces = 0
-    for (var i = 0; i < n; i++){
-      for(var j = 0; j < n; j++){
-        if(solutionMatrix[i][j] === 1){
-          numberOfPieces = numberOfPieces+1
+  // // Checks for a valid solution by counting pieces
+  // var isValid = function(n,solutionMatrix){  var numberOfPieces = 0
+  //   for (var i = 0; i < n; i++){
+  //     for(var j = 0; j < n; j++){
+  //       if(solutionMatrix[i][j] === 1){
+  //         numberOfPieces = numberOfPieces+1
 
-        }
-      }
-    }    
+  //       }
+  //     }
+  //   }    
 
-  if(numberOfPieces === n){
-    console.log(`*** This was counted as a solution`);
-      return true
-    }else{
-      return false
-    }
-  }
+  // if(numberOfPieces === n){
+  //   console.log(`*** This was counted as a solution`);
+  //     return true
+  //   }else{
+  //     return false
+  //   }
+  // }
   
-  var storedSolutions = []
+  // var storedSolutions = []
 
-  var Tree = function(value) {
-    var newTree = {};
-    newTree.value = value;
-    newTree.children = []; 
-    _.extend(newTree,treeMethods)
+  // var Tree = function(value) {
+  //   var newTree = {};
+  //   newTree.value = value;
+  //   newTree.children = []; 
+  //   _.extend(newTree,treeMethods)
 
-    return newTree;
-  };
+  //   return newTree;
+  // };
 
-    var treeMethods = {};
+  //   var treeMethods = {};
 
-    treeMethods.addChild = function(value) {
-      var newNode = Tree(value);
-      this.children.push(newNode);
-    };
+  //   treeMethods.addChild = function(value) {
+  //     var newNode = Tree(value);
+  //     this.children.push(newNode);
+  //   };
 
-  var treeBoard = Tree(null)
+  // var treeBoard = Tree(null)
 
-  var makeBoard = function(n, treeVal){
-    var depth = 0
-    for (let row = 0; row < n; row++) {
-      for (let col = 0; col < n; col++) {
-        if (depth >= n){
-          return
-        }
-        depth++ 
-        console.log(depth + 'is our depth')
-        if(treeVal === null){
-          console.log(treeVal + 'is our treeval')
-          treeBoard.addChild(new Board ({'n':n}))
-          treeBoard.children[treeBoard.children.length-1].value.togglePiece(row,col)
+  // var makeBoard = function(n, treeVal){
+  //   var depth = 0
+  //   for (let row = 0; row < n; row++) {
+  //     for (let col = 0; col < n; col++) {
+  //       if (depth >= n){
+  //         return
+  //       }
+  //       depth++ 
+  //       console.log(depth + 'is our depth')
+  //       if(treeVal === null){
+  //         console.log(treeVal + 'is our treeval')
+  //         treeBoard.addChild(new Board ({'n':n}))
+          // treeBoard.children[treeBoard.children.length-1].value.togglePiece(row,col)
       //   }else{
       //     debugger
       //     if (treeBoard.value.rows()[row][col] !== 1) {
@@ -116,13 +116,41 @@ window.countNRooksSolutions = function(n) {
       //     })
       //   }
       // }
-    }
-    makeBoard(n, treeBoard.value)
-  }
-}
-makeBoard(n)
+//     }
+//     makeBoard(n, treeBoard.value)
+//   }
+// }
+// makeBoard(n)
 
-  
+  var solutionCount = 0
+  var board = new Board({n:n})
+
+  var recursionSolution = function(row){
+    console.log('this is the current row '+ row)
+    if(row === n){
+      solutionCount++
+      return
+    }
+    //if all rows exhausted
+      //incriment solution count
+      //stop
+
+    //itterate over possible decisions
+    for(var i = 0; i<n; i++){
+      board.togglePiece(row,i)
+    
+      //place a piece
+      //recurse into remaining rows/problems
+      if(!board.hasAnyRooksConflicts()){
+        recursionSolution(row+1)
+      }
+      //unplace a piece
+      board.togglePiece(row,i)
+      
+    }
+  }
+  recursionSolution(0);
+
 
   // Find solutions from top left to bottom right
   //     var solutionMatrix = findNRooksSolution(n,row,col)
@@ -148,7 +176,34 @@ window.findNQueensSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined;
+  var solutionCount = 0
+  var board = new Board({n:n})
+
+  var recursionSolution = function(row){
+    console.log('this is the current row '+ row)
+    if(row === n){
+      solutionCount++
+      return
+    }
+    //if all rows exhausted
+      //incriment solution count
+      //stop
+
+    //itterate over possible decisions
+    for(var i = 0; i<n; i++){
+      board.togglePiece(row,i)
+    
+      //place a piece
+      //recurse into remaining rows/problems
+      if(!board.hasAnyQueensConflicts()){
+        recursionSolution(row+1)
+      }
+      //unplace a piece
+      board.togglePiece(row,i)
+      
+    }
+  }
+  recursionSolution(0);
 
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
